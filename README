@@ -1,0 +1,15 @@
+This is a collection of algorithms and data structures I create while
+preparing myself for a google interview. It contains everything they
+say I should prepare. 
+
+So far the structures use key as the value but I expect to have time
+in the near future to make them templates. So far it includes:
+
+- Binary Tree 
+
+- Red Black Binary Tree
+
+- Insertion sort, Quick sort, Merge sort and Heap sort
+
+- A heap priority Queue which I myself find quite useless (the only
+  element contained is the key used to order it).
