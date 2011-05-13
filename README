@@ -13,3 +13,6 @@ in the near future to make them templates. So far it includes:
 
 - A heap priority Queue which I myself find quite useless (the only
   element contained is the key used to order it).
+
+The code compiles with MS VC++ 2010 Express and with g++ 4.5 using 
+the compiler flag -std=gnu++0x (In order to support lambda funcionts)
