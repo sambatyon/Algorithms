@@ -1,5 +1,5 @@
 This is a collection of algorithms and data structures I create while
-preparing myself for a google interview. It contains everything they
+preparing myself for a interview. It contains everything they
 say I should prepare. 
 
 So far the structures use key as the value but I expect to have time
@@ -14,5 +14,9 @@ in the near future to make them templates. So far it includes:
 - A heap priority Queue which I myself find quite useless (the only
   element contained is the key used to order it).
 
+- A Hash table. It uses strings as keys and integers as values.
+
 The code compiles with MS VC++ 2010 Express and with g++ 4.5 using 
-the compiler flag -std=gnu++0x (In order to support lambda funcionts)
+the compiler flag -std=gnu++0x (In order to support lambda
+funcionts). Actually, the only C++0x feature that it uses is lambda
+functions (which I consider probably the most important addition to C++).
