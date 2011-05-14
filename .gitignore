@@ -2,3 +2,8 @@
 #*#
 *.kdev4
 build/
+CMakeCache.txt
+CMakeFiles/
+*.vcxproj*
+cmake_install.cmake
+*.sln
