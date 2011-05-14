@@ -6,11 +6,14 @@
 #include <queue>
 
 namespace graph {
+  
+const size_t Graph::kNil = std::numeric_limits<size_t>::max();
+const size_t Graph::kInfinity = std::numeric_limits<size_t>::max();
 
 Node::Node(int key) : key_(key),
                       color_(kWhite),
-                      predecesor_(std::numeric_limits<size_t>::max()),
-                      distance_to_source_(std::numeric_limits<size_t>::max()) {
+                      predecesor_(Graph::kNil),
+                      distance_to_source_(Graph::kInfinity) {
 }
 
 Graph::Graph() : nodes_(), edges_() {
@@ -34,13 +37,13 @@ void Graph::BreathFirstSearch(size_t source,
   std::for_each(nodes_.begin(), nodes_.end(),
                 [](Node &n) -> void {
                   n.set_color(kWhite);
-                  n.set_predecesor(std::numeric_limits<size_t>::max());
-                  n.set_distance_to_source(std::numeric_limits<size_t>::max());
+                  n.set_predecesor(kNil);
+                  n.set_distance_to_source(kInfinity);
                 }
                );
 
   nodes_[source].set_color(kGray);
-  nodes_[source].set_predecesor(std::numeric_limits<size_t>::max());
+  nodes_[source].set_predecesor(kNil);
   nodes_[source].set_distance_to_source(0);
   
   std::queue<size_t> to_visit;
@@ -61,6 +64,27 @@ void Graph::BreathFirstSearch(size_t source,
       nodes_[current].set_color(kBlack);
     }
   }
+}
+
+std::list<size_t> Graph::GetPath(size_t from, size_t to) {
+  std::list<size_t> res;
+  if (from == to) {
+    res.push_front(from);
+    return res;
+  } else if (nodes_[to].predecesor() == kNil) {
+    res.push_front(kInfinity);
+    return res;
+  } else {
+    std::list<size_t> tmp = GetPath(from, nodes_[to].predecesor());
+    if (tmp.front() == kInfinity) {
+      return res;
+    } else {
+      res.insert(res.begin(), tmp.begin(), tmp.end());
+      res.push_front(to);
+      return res;
+    }
+  }
+  return std::list<size_t>();
 }
 
   

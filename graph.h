@@ -42,12 +42,16 @@ class Node {
 
 class Graph {
  public:
+  static const size_t kInfinity;
+  static const size_t kNil;
   Graph();
-  // if edges contains the pair (i, j) then there is an edge between nodes[i] and
-  // nodes[j]
+  // if edges contains the pair (i, j) then there is an edge between nodes[i] 
+  // and nodes[j]
   void Init(std::vector<Node> nodes,
             std::vector<std::pair<size_t, size_t> > edges);
   void BreathFirstSearch(size_t source, std::function<void(Node &)> callback);
+  // requires to run BreathFirstSearch before running GetPath
+  std::list<size_t> GetPath(size_t from, size_t to);
 
  private:
   std::vector<Node> nodes_;
