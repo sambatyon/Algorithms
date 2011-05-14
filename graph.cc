@@ -25,11 +25,12 @@ void Graph::Init(std::vector<Node> &nodes,
             std::vector<std::pair<size_t, size_t> > &edges) {
   nodes_.clear();
   edges_.resize(nodes.size());
+  std::vector<std::list<size_t> > *edges_ptr = &edges_;
   
   std::copy(nodes.begin(), nodes.end(), std::back_inserter(nodes_));
   std::for_each(edges.begin(), edges.end(),
-      [&edges_](std::pair<size_t, size_t> &edge) -> void {
-        edges_[edge.first].push_back(edge.second);
+      [edges_ptr](std::pair<size_t, size_t> &edge) -> void {
+        (*edges_ptr)[edge.first].push_back(edge.second);
       }    
   );
   std::for_each(edges_.begin(), edges_.end(), [](std::list<size_t> &l) {

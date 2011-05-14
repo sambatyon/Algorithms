@@ -7,3 +7,9 @@ CMakeFiles/
 *.vcxproj*
 cmake_install.cmake
 *.sln
+Debug/
+Win32/
+algorithms.dir/
+algorithms.opensdf
+algorithms.sdf
+ipch/
