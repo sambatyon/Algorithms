@@ -13,14 +13,16 @@ const size_t Graph::kInfinity = std::numeric_limits<size_t>::max();
 Node::Node(int key) : key_(key),
                       color_(kWhite),
                       predecesor_(Graph::kNil),
-                      distance_to_source_(Graph::kInfinity) {
+                      distance_to_source_(Graph::kInfinity),
+                      discovery_time_(Graph::kInfinity),
+                      visited_time_(Graph::kInfinity) {
 }
 
 Graph::Graph() : nodes_(), edges_() {
 }
 
-void Graph::Init(std::vector<Node> nodes,
-            std::vector<std::pair<size_t, size_t> > edges) {
+void Graph::Init(std::vector<Node> &nodes,
+            std::vector<std::pair<size_t, size_t> > &edges) {
   nodes_.clear();
   edges_.resize(nodes.size());
   
@@ -29,6 +31,10 @@ void Graph::Init(std::vector<Node> nodes,
       [&edges_](std::pair<size_t, size_t> &edge) -> void {
         edges_[edge.first].push_back(edge.second);
       }    
+  );
+  std::for_each(edges_.begin(), edges_.end(), [](std::list<size_t> &l) {
+    l.sort();
+  }
   );
 }
 
@@ -60,9 +66,9 @@ void Graph::BreathFirstSearch(size_t source,
         nodes_[*it].set_predecesor(current);
         to_visit.push(*it);
       }
-      callback(nodes_[current]);
-      nodes_[current].set_color(kBlack);
     }
+    callback(nodes_[current]);
+    nodes_[current].set_color(kBlack);
   }
 }
 
@@ -85,6 +91,36 @@ std::list<size_t> Graph::GetPath(size_t from, size_t to) {
     }
   }
   return std::list<size_t>();
+}
+
+void Graph::DepthFirstSearch(std::function<void(Node &)> callback) {
+  std::for_each(nodes_.begin(), nodes_.end(),
+                [](Node &n) -> void {
+                  n.set_color(kWhite);
+                  n.set_predecesor(kNil);
+                  n.set_distance_to_source(kInfinity);
+                });
+  unsigned time = 0;
+  for (size_t node = 0; node < nodes_.size(); ++node)
+    if (nodes_[node].color() == kWhite)
+      DepthFirstSearchVisit(node, callback, &time);
+}
+
+void Graph::DepthFirstSearchVisit(size_t node,
+                                  std::function<void(Node &)> callback,
+                                  unsigned *time) {
+  nodes_[node].set_discovery_time((*time)++);
+  nodes_[node].set_color(kGray);
+  for (std::list<size_t>::iterator it = edges_[node].begin();
+      it != edges_[node].end(); ++it) {
+    if (nodes_[*it].color() == kWhite) {
+      nodes_[*it].set_predecesor(node);
+      DepthFirstSearchVisit(*it, callback, time);
+    }
+  }
+  nodes_[node].set_color(kBlack);
+  nodes_[node].set_visited_time((*time)++);
+  callback(nodes_[node]);
 }
 
   

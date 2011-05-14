@@ -1,11 +1,14 @@
 #include "sort.h"
 #include "red-black.h"
 #include "heap.h"
+#include "graph.h"
 
 #include <iostream>
 #include <vector>
 #include <iterator>
 #include <algorithm>
+#include <utility>
+#include <cstdio>
 
 void PrintVec(std::vector<int> &vec) {
   std::ostream_iterator<int> oi(std::cout, " ");
@@ -57,6 +60,50 @@ int main(int argc, char **argv) {
   MergeSort(vec3);
   PrintVec(vec3);
 
-	return 0;
+  std::cout << std::endl << "Graphs: " << std::endl;
+  std::vector<graph::Node> nodes(8, graph::Node(0));
+  int i = 0;
+  std::for_each(nodes.begin(), nodes.end(),
+                [&i](graph::Node &n) -> void {n.set_key(i++);});
+  std::vector<std::pair<size_t, size_t> > edges;
+  edges.push_back(std::make_pair<size_t, size_t>(0, 1));
+  edges.push_back(std::make_pair<size_t, size_t>(0, 4));
+  edges.push_back(std::make_pair<size_t, size_t>(1, 0));
+  edges.push_back(std::make_pair<size_t, size_t>(1, 5));
+  edges.push_back(std::make_pair<size_t, size_t>(2, 3));
+  edges.push_back(std::make_pair<size_t, size_t>(2, 5));
+  edges.push_back(std::make_pair<size_t, size_t>(2, 6));
+  edges.push_back(std::make_pair<size_t, size_t>(3, 2));
+  edges.push_back(std::make_pair<size_t, size_t>(3, 6));
+  edges.push_back(std::make_pair<size_t, size_t>(3, 7));
+  edges.push_back(std::make_pair<size_t, size_t>(4, 0));
+  edges.push_back(std::make_pair<size_t, size_t>(5, 1));
+  edges.push_back(std::make_pair<size_t, size_t>(5, 2));
+  edges.push_back(std::make_pair<size_t, size_t>(5, 6));
+  edges.push_back(std::make_pair<size_t, size_t>(6, 2));
+  edges.push_back(std::make_pair<size_t, size_t>(6, 3));
+  edges.push_back(std::make_pair<size_t, size_t>(6, 5));
+  edges.push_back(std::make_pair<size_t, size_t>(6, 7));
+  edges.push_back(std::make_pair<size_t, size_t>(7, 6));
+  edges.push_back(std::make_pair<size_t, size_t>(7, 3));
+  graph::Graph graph;
+  graph.Init(nodes, edges);
+  graph.BreathFirstSearch(0,
+      [](graph::Node &n) -> void {std::cout << n.key() << " ";});
+  std::cout << std::endl;
+  std::list<size_t> path = graph.GetPath(0, 7);
+  if (path.front() != graph::Graph::kInfinity) {
+    std::ostream_iterator<size_t> oi(std::cout, " ");
+    std::copy(path.begin(), path.end(), oi);
+    std::cout << std::endl;
+  } else {
+    std::cout << "Path does not exist" << std::endl;
+  }
+  graph.DepthFirstSearch([](graph::Node &n) -> void {
+    std::printf("key: %d\n\tdisc: %d\n\tvis: %d\n", n.key(), n.discovery_time(),
+                n.visited_time());
+  });
+  
+  return 0;
 }
 
