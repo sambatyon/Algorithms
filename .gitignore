@@ -13,3 +13,4 @@ algorithms.dir/
 algorithms.opensdf
 algorithms.sdf
 ipch/
+*.suo
