@@ -20,3 +20,9 @@ The code compiles with MS VC++ 2010 Express and with g++ 4.5 using
 the compiler flag -std=gnu++0x (In order to support lambda
 funcionts). Actually, the only C++0x feature that it uses is lambda
 functions (which I consider probably the most important addition to C++).
+
+To build in windows:
+   cmake -G "Visual Studio 10"
+
+To build in linux:
+   cmake
